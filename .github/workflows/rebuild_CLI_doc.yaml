@@ -1,0 +1,37 @@
+name: Rebuild CLI documentation
+
+on: workflow_dispatch
+jobs:
+  build-cli:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Define Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build CLI
+        run: ./gradlew installDist --build-cache
+
+  rebuild-ci-doc:
+    runs-on: ubuntu-latest
+    needs: build-cli
+    steps:
+      - run: sudo apt install git-all
+      - name: Install SDKMan
+        run: (curl -s "https://get.sdkman.io" | bash) && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+      - run: sdk install java 8.0.242.hs-adpt
+      - run: sdk install kotlin
+      - run: sdk install kscript
+
+      - name: Run rebuild CLI doc script
+        run: kscript modules/cli/scripts/rebuild-doc.kts
