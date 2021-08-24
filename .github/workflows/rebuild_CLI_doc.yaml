@@ -25,7 +25,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-cli
     steps:
-      - run: sudo apt install git-all
       - name: Install SDKMan
         run: (curl -s "https://get.sdkman.io" | bash) && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
