@@ -26,10 +26,6 @@ jobs:
     needs: build-cli
     steps:
       - run: curl -s "https://get.sdkman.io" | bash
-      - run: source "/home/runner/.sdkman/bin/sdkman-init.sh"
-      - run: sdk install java 8.0.242.hs-adpt
-      - run: sdk install kotlin
-      - run: sdk install kscript
-
+      - run: source "/home/runner/.sdkman/bin/sdkman-init.sh" && sdk install java 8.0.242.hs-adpt && sdk install kotlin &&  sdk install kscript
       - name: Run rebuild CLI doc script
         run: kscript modules/cli/scripts/rebuild-doc.kts
