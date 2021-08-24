@@ -1,6 +1,6 @@
 name: Rebuild CLI documentation
 
-on: workflow_dispatch
+on: push
 jobs:
   build-cli:
     runs-on: ubuntu-latest
